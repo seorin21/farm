@@ -217,7 +217,7 @@ fun interface EntityRegionProvider<T : Event>: EntityProvider<T> {
     }
 
     class PotionSplash {
-        class PotionThrrowedByEntity: EntityProvider<PotionSplashEvent> {
+        class PotionThrrowByEntity: EntityProvider<PotionSplashEvent> {
             override fun getFrom(event: PotionSplashEvent): Entity? {
                 val entity = event.entity
                 if (entity is Player)
@@ -227,7 +227,7 @@ fun interface EntityRegionProvider<T : Event>: EntityProvider<T> {
             }
         }
 
-        class PotionThrrowedByPlayer: EntityProvider<PotionSplashEvent> {
+        class PotionThrrowByPlayer: EntityProvider<PotionSplashEvent> {
             override fun getFrom(event: PotionSplashEvent): Entity? {
                 val entity = event.entity
                 if (entity !is Player)
@@ -239,7 +239,7 @@ fun interface EntityRegionProvider<T : Event>: EntityProvider<T> {
     }
 
     class EntityTarget {
-        class EntityTargetedByEntity: EntityProvider<EntityTargetEvent> {
+        class EntityTargetByEntity: EntityProvider<EntityTargetEvent> {
             override fun getFrom(event: EntityTargetEvent): Entity? {
                 val target = event.target ?: return null
                 if (target is Player)
@@ -249,7 +249,7 @@ fun interface EntityRegionProvider<T : Event>: EntityProvider<T> {
             }
         }
 
-        class PlayerTargetedByEntity: EntityProvider<EntityTargetEvent> {
+        class PlayerTargetByEntity: EntityProvider<EntityTargetEvent> {
             override fun getFrom(event: EntityTargetEvent): Entity? {
                 val target = event.target ?: return null
                 if (target !is Player)

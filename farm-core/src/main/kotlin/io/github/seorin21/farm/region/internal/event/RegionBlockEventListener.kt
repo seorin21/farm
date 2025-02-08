@@ -1,6 +1,5 @@
 package io.github.seorin21.farm.region.internal.event
 
-import io.github.seorin21.farm.region.RegionManager
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.block.BlockState
@@ -20,13 +19,13 @@ class RegionBlockEventListener: Listener {
     // Block
 
     @EventHandler
-    fun onBlockExplode(event: BlockExplodeEvent) {
+    fun onBlockExplosion(event: BlockExplodeEvent) {
         val world = event.block.world
         if (!isWorldValid(world))
             return
 
-        if (isConfigValid("BlockExplode")) {
-            if (isConfigValid("BlockExplodedByBlock"))
+        if (isConfigValid("BlockExplosion")) {
+            if (isConfigValid("BlockExplosionByBlock"))
                 return
 
             val chunk = event.block.chunk
@@ -216,27 +215,6 @@ class RegionBlockEventListener: Listener {
         event.isCancelled = true
     }
 
-//    @EventHandler
-//    fun onBlockPhysicsByPiston(event: BlockPhysicsEvent) {
-//        val world = event.block.world
-//        if (!isWorldValid(world))
-//            return
-//
-//        val source = event.sourceBlock
-//        val block = event.block
-//
-//        if (isChunkValid(source.chunk, block.chunk))
-//            return
-//
-//        if (!isRedstone(source.type))
-//            return
-//
-//        if (isConfigValid("BlockPhysicsByPiston"))
-//            return
-//
-//        event.isCancelled = true
-//    }
-
     @EventHandler
     fun onBlockPhysicsBySponge(event: BlockPhysicsEvent) {
         val world = event.block.world
@@ -261,7 +239,7 @@ class RegionBlockEventListener: Listener {
     // Piston
 
     @EventHandler
-    fun onBlockPhysicsBySponge(event: BlockPistonExtendEvent) {
+    fun onBlockPhysicsByPiston(event: BlockPistonExtendEvent) {
         val world = event.block.world
         if (!isWorldValid(world))
             return
@@ -277,7 +255,7 @@ class RegionBlockEventListener: Listener {
     }
 
     @EventHandler
-    fun onBlockPhysicsBySponge(event: BlockPistonRetractEvent) {
+    fun onBlockPhysicsByPiston(event: BlockPistonRetractEvent) {
         val world = event.block.world
         if (!isWorldValid(world))
             return
@@ -318,12 +296,12 @@ class RegionBlockEventListener: Listener {
     // Wood, Floor
 
     @EventHandler
-    fun onStructureGrow(event: StructureGrowEvent) {
+    fun onStructureGrowth(event: StructureGrowEvent) {
         val world = event.world
         if (!isWorldValid(world))
             return
 
-        if (isConfigValid("StructureGrow"))
+        if (isConfigValid("StructureGrowth"))
             return
 
         val chunk = event.location.chunk
@@ -362,7 +340,7 @@ class RegionBlockEventListener: Listener {
     // Etc
 
     @EventHandler
-    fun onInventoryMoveItem(event: InventoryMoveItemEvent) {
+    fun onItemMovementInInventory(event: InventoryMoveItemEvent) {
         val from = event.initiator.location ?: return
         val to = event.destination.location ?: return
 
@@ -370,7 +348,7 @@ class RegionBlockEventListener: Listener {
         if (!isWorldValid(world))
             return
 
-        if (isConfigValid("InventoryMoveItem"))
+        if (isConfigValid("ItemMovementInInventory"))
             return
 
         if (isChunkValid(from.chunk, to.chunk))

@@ -17,17 +17,17 @@ open class RegionConfig {
     @Config(value = "PlayerDamageByPlayer", required = true)
     var PlayerDamageByPlayer: Boolean = false
 
-    @Config(value = "PlayerMove", required = true)
-    var PlayerMove: Boolean = false
+    @Config(value = "PlayerMovement", required = true)
+    var PlayerMovement: Boolean = false
 
     @Config(value = "PlayerTeleport", required = true)
     var PlayerTeleport: Boolean = false
 
-    @Config(value = "PlayerBedLeaveForChunk", required = true)
-    var PlayerBedLeaveForChunk: Boolean = false
+    @Config(value = "PlayerTeleportByBed", required = true)
+    var PlayerTeleportByBed: Boolean = false
 
-    @Config(value = "PlayerTargetedByEntity", required = true)
-    var PlayerTargetedByEntity: Boolean = false
+    @Config(value = "PlayerTargetByEntity", required = true)
+    var PlayerTargetByEntity: Boolean = false
 
     // Entity 
     @Config(value = "EntityDamageByEntity", required = true)
@@ -42,30 +42,30 @@ open class RegionConfig {
     @Config(value = "EntityTeleport", required = true)
     var EntityTeleport: Boolean = false
 
-    @Config(value = "EntityExplode", required = true)
-    var EntityExplod: Boolean = false
+    @Config(value = "EntityExplosion", required = true)
+    var EntityExplosion: Boolean = false
 
     @Config(value = "EntityInteractionByPlayer", required = true)
     var EntityInteractionByPlayer: Boolean = false
 
-    @Config(value = "EntityTargetedByEntity", required = true)
-    var EntityTargetedByEntity: Boolean = false
+    @Config(value = "EntityTargetByEntity", required = true)
+    var EntityTargetByEntity: Boolean = false
 
     // Block 
-    @Config(value = "BlockPlacedByPlayer", required = true)
-    var BlockPlacedByPlayer: Boolean = false
+    @Config(value = "BlockPlacementByPlayer", required = true)
+    var BlockPlacementByPlayer: Boolean = false
 
-    @Config(value = "BlockBreakedByPlayer", required = true)
-    var BlockBreakedByPlayer: Boolean = false
+    @Config(value = "BlockBreakByPlayer", required = true)
+    var BlockBreakByPlayer: Boolean = false
 
-    @Config(value = "BlockExplode", required = true)
-    var BlockExplode: Boolean = false
+    @Config(value = "BlockExplosion", required = true)
+    var BlockExplosion: Boolean = false
 
-    @Config(value = "BlockExplodedByEntity", required = true)
-    var BlockExplodedByEntity: Boolean = false
+    @Config(value = "BlockExplosionByEntity", required = true)
+    var BlockExplosionByEntity: Boolean = false
 
-    @Config(value = "BlockExplodedByBlock", required = true)
-    var BlockExplodedByBlock: Boolean = false
+    @Config(value = "BlockExplosionByBlock", required = true)
+    var BlockExplosionByBlock: Boolean = false
 
     @Config(value = "BlockInteractionByPlayer", required = true)
     var BlockInteractionByPlayer: Boolean = false
@@ -99,13 +99,13 @@ open class RegionConfig {
     @Config(value = "LiquidFromToChunk", required = true)
     var LiquidFromToChunk: Boolean = false
 
-    @Config(value = "LiquidPlacedByPlayer", required = true)
-    var LiquidPlacedByPlayer: Boolean = false
+    @Config(value = "LiquidPlacementByPlayer", required = true)
+    var LiquidPlacementByPlayer: Boolean = false
 
     // Wood, Floor
 
-    @Config(value = "StructureGrow", required = true)
-    var StructureGrow: Boolean = false
+    @Config(value = "StructureGrowth", required = true)
+    var StructureGrowth: Boolean = false
 
     // Projectile
     
@@ -128,21 +128,21 @@ open class RegionConfig {
     var EntityProjectileDamageByPlayer: Boolean = false
 
     // Potion 
-    @Config(value = "PotionThrrowedByEntity", required = true)
-    var PotionThrrowedByEntity: Boolean = false
+    @Config(value = "PotionThrrowByEntity", required = true)
+    var PotionThrrowByEntity: Boolean = false
 
-    @Config(value = "PotionThrrowedByPlayer", required = true)
-    var PotionThrrowedByPlayer: Boolean = false
+    @Config(value = "PotionThrrowByPlayer", required = true)
+    var PotionThrrowByPlayer: Boolean = false
 
-    @Config(value = "LingeringPotionThrrowed", required = true)
+    @Config(value = "LingeringPotionThrrow", required = true)
     var LingeringPotionSplash: Boolean = false
 
-    @Config(value = "PotionSplashed", required = true)
-    var EntityPotionSplashed: Boolean = false
+    @Config(value = "PotionSplash", required = true)
+    var EntityPotionSplash: Boolean = false
 
-    @Config(value = "LingeringPotionSplashed", required = true)
-    var EntityLingeringPotionSplashed: Boolean = false
+    @Config(value = "LingeringPotionSplash", required = true)
+    var EntityLingeringPotionSplash: Boolean = false
 
-    @Config(value = "InventoryMoveItem", required = true)
-    var InventoryMoveItem: Boolean = false
+    @Config(value = "ItemMovementInInventory", required = true)
+    var ItemMovementInInventory: Boolean = false
 }

@@ -5,9 +5,11 @@ import io.github.monun.tap.event.TargetEntity
 import io.github.seorin21.farm.region.RegionManager
 import org.bukkit.Bukkit
 import org.bukkit.Chunk
+import org.bukkit.Material
 import org.bukkit.World
 import org.bukkit.block.Block
 import org.bukkit.entity.Entity
+import org.bukkit.entity.EntityType
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
@@ -92,7 +94,7 @@ class RegionEventListener(private val plugin: JavaPlugin): Listener {
     }
 
     @EventHandler
-    fun onPlayerMove(event: PlayerMoveEvent) {
+    fun onPlayerMovement(event: PlayerMoveEvent) {
         val world = event.from.world
         if (!isWorldValid(world))
             return
@@ -105,7 +107,7 @@ class RegionEventListener(private val plugin: JavaPlugin): Listener {
             if (isChunkValid(from.chunk, to.chunk))
                 return
 
-            if (isConfigValid("PlayerMove"))
+            if (isConfigValid("PlayerMovement"))
                 return
         }
 
@@ -151,7 +153,7 @@ class RegionEventListener(private val plugin: JavaPlugin): Listener {
     }
 
     @EventHandler
-    fun onPlayerBedLeaveForChunk(event: PlayerBedLeaveEvent) {
+    fun onPlayerTeleportByBed(event: PlayerBedLeaveEvent) {
         val world = event.player.world
         if (!isWorldValid(world))
             return
@@ -163,7 +165,7 @@ class RegionEventListener(private val plugin: JavaPlugin): Listener {
             if (isChunkValid(bed.chunk, player.chunk))
                 return
 
-            if (isConfigValid("PlayerBedLeaveForChunk"))
+            if (isConfigValid("PlayerTeleportByBed"))
                 return
         }
 
@@ -183,8 +185,8 @@ class RegionEventListener(private val plugin: JavaPlugin): Listener {
     }
 
     @EventHandler
-    @TargetEntity(EntityRegionProvider.EntityTarget.PlayerTargetedByEntity::class)
-    fun onPlayerTargetedByEntity(event: EntityTargetEvent) {
+    @TargetEntity(EntityRegionProvider.EntityTarget.PlayerTargetByEntity::class)
+    fun onPlayerTargetByEntity(event: EntityTargetEvent) {
         val world = event.entity.world
         if (!isWorldValid(world))
             return
@@ -195,7 +197,7 @@ class RegionEventListener(private val plugin: JavaPlugin): Listener {
         if (isChunkValid(entity.chunk, target.chunk))
             return
 
-        if (isConfigValid("PlayerTargetedByEntity"))
+        if (isConfigValid("PlayerTargetByEntity"))
             return
 
         event.isCancelled = true
@@ -280,13 +282,13 @@ class RegionEventListener(private val plugin: JavaPlugin): Listener {
     }
 
     @EventHandler
-    fun onEntityExplode(event: EntityExplodeEvent) {
+    fun onEntityExplosion(event: EntityExplodeEvent) {
         val world = event.entity.world
         if (!isWorldValid(world))
             return
 
-        if (isConfigValid("EntityExplode")) {
-            if (isConfigValid("BlockExplodedByEntity"))
+        if (isConfigValid("EntityExplosion")) {
+            if (isConfigValid("BlockExplosionByEntity"))
                 return
 
             val chunk = event.location.chunk
@@ -329,8 +331,8 @@ class RegionEventListener(private val plugin: JavaPlugin): Listener {
     }
 
     @EventHandler
-    @TargetEntity(EntityRegionProvider.EntityTarget.EntityTargetedByEntity::class)
-    fun onEntityTargetedByEntity(event: EntityTargetEvent)  {
+    @TargetEntity(EntityRegionProvider.EntityTarget.EntityTargetByEntity::class)
+    fun onEntityTargetByEntity(event: EntityTargetEvent)  {
         val world = event.entity.world
         if (!isWorldValid(world))
             return
@@ -341,7 +343,7 @@ class RegionEventListener(private val plugin: JavaPlugin): Listener {
         if (isChunkValid(entity.chunk, target.chunk))
             return
 
-        if (isConfigValid("EntityTargetedByEntity"))
+        if (isConfigValid("EntityTargetByEntity"))
             return
 
         event.isCancelled = true
@@ -350,7 +352,7 @@ class RegionEventListener(private val plugin: JavaPlugin): Listener {
     // Block Reladted
 
     @EventHandler
-    fun onBlockPlacedByPlayer(event: BlockPlaceEvent) {
+    fun onBlockPlacementByPlayer(event: BlockPlaceEvent) {
         val world = event.player.world
         if (!isWorldValid(world))
             return
@@ -370,7 +372,7 @@ class RegionEventListener(private val plugin: JavaPlugin): Listener {
     }
 
     @EventHandler
-    fun onBlockBreakedByPlayer(event: BlockBreakEvent) {
+    fun onBlockBreakByPlayer(event: BlockBreakEvent) {
         val world = event.player.world
         if (!isWorldValid(world))
             return
@@ -430,7 +432,7 @@ class RegionEventListener(private val plugin: JavaPlugin): Listener {
     // Liquid
 
     @EventHandler
-    fun onLiquidPlacedByPlayer(event: PlayerBucketEmptyEvent) {
+    fun onLiquidPlacementByPlayer(event: PlayerBucketEmptyEvent) {
         val world = event.player.world
         if (!isWorldValid(world))
             return
@@ -442,7 +444,7 @@ class RegionEventListener(private val plugin: JavaPlugin): Listener {
             if (isChunkValid(player.chunk, block.chunk))
                 return
 
-            if (isConfigValid("LiquidPlacedByPlayer"))
+            if (isConfigValid("LiquidPlacementByPlayer"))
                 return
         }
 
@@ -580,18 +582,22 @@ class RegionEventListener(private val plugin: JavaPlugin): Listener {
     // Potion 
 
     @EventHandler
-    @TargetEntity(EntityRegionProvider.PotionSplash.PotionThrrowedByEntity::class)
-    fun onPotionThrrowedByEntity(event: PotionSplashEvent) {
+    @TargetEntity(EntityRegionProvider.PotionSplash.PotionThrrowByEntity::class)
+    fun onPotionThrrowByEntity(event: PotionSplashEvent) {
         val world = event.entity.world
         if (!isWorldValid(world))
             return
 
-        if (isConfigValid("PotionThrrowedByEntity")) {
+        val potion = event.potion
+        if (potion.item.type == Material.LINGERING_POTION)  {
+            if (isConfigValid("LingeringPotionSplash"))
+                return
+        }
+        else if (isConfigValid("PotionThrrowByEntity")) {
             val shooter = event.entity
-            val potion = event.potion
 
             if (isChunkValid(shooter.chunk, potion.chunk)) {
-                if (isConfigValid("PotionSplashed"))
+                if (isConfigValid("PotionSplash"))
                     return
 
                 val entities = event.affectedEntities.toList()
@@ -608,19 +614,19 @@ class RegionEventListener(private val plugin: JavaPlugin): Listener {
     }
 
     @EventHandler
-    @TargetEntity(EntityRegionProvider.PotionSplash.PotionThrrowedByPlayer::class)
-    fun onPotionThrrowedByPlayer(event: PotionSplashEvent) {
+    @TargetEntity(EntityRegionProvider.PotionSplash.PotionThrrowByPlayer::class)
+    fun onPotionThrrowByPlayer(event: PotionSplashEvent) {
         val world = event.entity.world
         if (!isWorldValid(world))
             return
 
         val shooter = event.entity as Player
         if (isRegionValid(shooter))
-            if (isConfigValid("PotionThrrowedByPlayer")) {
+            if (isConfigValid("PotionThrrowByPlayer")) {
                 val potion = event.potion
 
                 if (isChunkValid(shooter.chunk, potion.chunk)) {
-                    if (isConfigValid("PotionSplashed"))
+                    if (isConfigValid("PotionSplash"))
                         return
 
                     val entities = event.affectedEntities.toList()
@@ -642,8 +648,8 @@ class RegionEventListener(private val plugin: JavaPlugin): Listener {
         if (!isWorldValid(world))
             return
 
-        if (isConfigValid("LingeringPotionThrrowed")) {
-            if (isConfigValid("LingeringPotionSplashed"))
+        if (isConfigValid("LingeringPotionThrrow")) {
+            if (isConfigValid("LingeringPotionSplash"))
                 return
 
             val potion = event.entity
