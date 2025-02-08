@@ -1,7 +1,8 @@
 plugins {
     idea
     alias(libs.plugins.kotlin)
-    alias(libs.plugins.dokka)
+    alias(libs.plugins.serialization)
+    alias(libs.plugins.dokka) apply false
 }
 
 java {
@@ -18,6 +19,7 @@ allprojects {
 
 subprojects {
     apply(plugin = rootProject.libs.plugins.kotlin.get().pluginId)
+    apply(plugin = rootProject.libs.plugins.serialization.get().pluginId)
 
     repositories {
         maven("https://repo.papermc.io/repository/maven-public/")
@@ -25,9 +27,18 @@ subprojects {
 
     dependencies {
         compileOnly(rootProject.libs.paper)
+        implementation(rootProject.libs.tap)
 
         implementation(kotlin("stdlib"))
         implementation(kotlin("reflect"))
+
+        implementation(rootProject.libs.serialization)
+
+//        implementation(kotlin("coroutines-core"))
+//        implementation(kotlin("coroutines"))
+//
+//        implementation(kotlin("serialization-core"))
+//        implementation(kotlin("serialization"))
     }
 }
 
