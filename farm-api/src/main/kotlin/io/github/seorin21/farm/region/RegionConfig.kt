@@ -12,6 +12,10 @@ open class RegionConfig {
 
 
     // Block
+    // BlockDispense
+    @Config(value = "BlockDispensation", required = true)
+    var BlockDispensation: Boolean = false
+
     // BlockFromTo
     /**
      * 블럭이 흐르는(예를 들면 물, 용암) 이벤트입니다.

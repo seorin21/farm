@@ -7,10 +7,7 @@ import org.bukkit.Chunk
 import org.bukkit.Material
 import org.bukkit.World
 import org.bukkit.block.Block
-import org.bukkit.block.BlockFace
 import org.bukkit.block.BlockState
-import org.bukkit.block.data.Openable
-import org.bukkit.block.data.Powerable
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
@@ -56,6 +53,23 @@ class RegionEventListener(private val plugin: JavaPlugin): Listener {
 
     // Events
     // Block
+    @EventHandler
+    fun onBlockDispensation(event: BlockDispenseEvent) {
+        val from = event.block
+        val to = from.location.add(event.velocity)
+
+        if (!isWorldValid(from.world))
+            return
+
+        if (event.item.type.name.contains("POTION", ignoreCase = true))
+            return
+
+        if (isChunkValid(from.chunk, to.chunk)) return
+        if (isConfigValid("BlockDispensatio")) return
+
+        event.isCancelled = true
+    }
+
     @EventHandler
     fun onBlockInteractionFromTo(event: BlockFromToEvent) {
         val from = event.block
@@ -137,23 +151,6 @@ class RegionEventListener(private val plugin: JavaPlugin): Listener {
 
         if (isConfigValid("BlockBreakByPlayer"))
             return
-
-        event.isCancelled = true
-    }
-
-    @EventHandler
-    fun onBlockDispensation(event: BlockDispenseEvent) {
-        val from = event.block
-        val to = from.location.add(event.velocity)
-
-        if (!isWorldValid(from.world))
-            return
-
-        if (event.item.type.name.contains("POTION", ignoreCase = true))
-            return
-
-        if (isChunkValid(from.chunk, to.chunk)) return
-        if (isConfigValid("BlockDispensatio")) return
 
         event.isCancelled = true
     }
@@ -320,6 +317,9 @@ class RegionEventListener(private val plugin: JavaPlugin): Listener {
 
         if (!isWorldValid(from.world))
             return
+
+        if (isChunkValid(from.chunk, to.chunk))
+            if (hasRegion(from)) return
 
         if (isConfigValid("PlayerBedEntry"))
             return
