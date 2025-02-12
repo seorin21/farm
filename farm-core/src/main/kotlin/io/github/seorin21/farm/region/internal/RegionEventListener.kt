@@ -263,8 +263,23 @@ class RegionEventListener(private val plugin: JavaPlugin): Listener {
         if (!isWorldValid(from.world))
             return
 
-        if (isChunkValid(from.chunk, to.chunk))
-            if (hasRegion(from)) return
+        event.let {
+            val itemInMainHand = from.inventory.itemInMainHand
+            val itemInOffHand = from.inventory.itemInOffHand
+
+            if (itemInMainHand.type == Material.BONE_MEAL) {
+                return@let
+            }
+            else if (itemInOffHand.type == Material.BONE_MEAL) {
+                if (itemInMainHand.type.isBlock) {
+                    if (itemInMainHand.type.isEmpty) return@let
+                } else return@let
+            }
+
+            if (isChunkValid(from.chunk, to.chunk))
+                if (hasRegion(from)) return
+        }
+
 
         if (isConfigValid("BlockPlacementByPlayer"))
             return
@@ -297,7 +312,7 @@ class RegionEventListener(private val plugin: JavaPlugin): Listener {
         if (!isWorldValid(from.world))
             return
 
-        if (isConfigValid("StructureGrowth")) return
+        if (isConfigValid("BlockPlacementByPlayer")) return
 
         val removes = mutableListOf<BlockState>()
         for (to in toto) {
