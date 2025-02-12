@@ -38,6 +38,5 @@ class FarmPlugin: JavaPlugin() {
     }
 
     override fun onDisable() {
-        RegionManager.setRegionConfig()
     }
 }

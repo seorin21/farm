@@ -1,25 +1,27 @@
 package io.github.seorin21.farm.region.internal
 
 import io.github.monun.tap.config.ConfigSupport
+import io.github.monun.tap.event.EntityEventManager
+
 import io.github.seorin21.farm.data.PersistentDataSupport
 import io.github.seorin21.farm.data.PlayerRegionKeys.regionKey
 import io.github.seorin21.farm.data.RegionData
 import io.github.seorin21.farm.data.persistentData
-import io.github.seorin21.farm.event.EntityEventManager
-import io.github.seorin21.farm.region.internal.event.RegionEventListener
 import io.github.seorin21.farm.region.RegionConfig
 import io.github.seorin21.farm.region.RegionManager
-import io.github.seorin21.farm.region.internal.event.RegionBlockEventListener
+
 import org.bukkit.entity.Player
 import org.bukkit.event.HandlerList
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.java.PluginClassLoader
+
 import java.io.File
-import java.util.*
+
 import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
+
 
 @Suppress("unused")
 class RegionManagerImpl: RegionManager {
@@ -30,7 +32,6 @@ class RegionManagerImpl: RegionManager {
     private val CONFIG_PATH: File
 
     private val event: RegionEventListener
-    private val blockEvent: RegionBlockEventListener
 
     init {
         val pluginClassLoader = PersistentDataSupport::class.java.classLoader as PluginClassLoader
@@ -44,7 +45,6 @@ class RegionManagerImpl: RegionManager {
         this.config = this.getRegionConfig()
 
         this.event = RegionEventListener(this.plugin)
-        this.blockEvent = RegionBlockEventListener()
     }
 
     override fun hasRegion(player: Player): Boolean {
@@ -167,6 +167,9 @@ class RegionManagerImpl: RegionManager {
             }
         }
 
+        setRegionConfig()
+
+
         return result
     }
 
@@ -184,17 +187,18 @@ class RegionManagerImpl: RegionManager {
 
         property.setter.call(config, value)
 
+        setRegionConfig()
+
+
         return true
     }
 
     override fun registerEvents() {
-        this.manager.registerGlobalEvents(this.event)
-        plugin.server.pluginManager.registerEvents(this.blockEvent, plugin)
+        plugin.server.pluginManager.registerEvents(this.event, plugin)
     }
 
     override fun unregisterEvents() {
-        this.manager.unregisterGlobalEvents(this.event)
-        HandlerList.unregisterAll(this.blockEvent)
+        HandlerList.unregisterAll(this.event)
     }
 
     override fun getWorldName(): String {
