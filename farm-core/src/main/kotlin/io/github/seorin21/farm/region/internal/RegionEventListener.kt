@@ -280,7 +280,6 @@ class RegionEventListener(private val plugin: JavaPlugin): Listener {
                 if (hasRegion(from)) return
         }
 
-
         if (isConfigValid("BlockPlacementByPlayer"))
             return
 
