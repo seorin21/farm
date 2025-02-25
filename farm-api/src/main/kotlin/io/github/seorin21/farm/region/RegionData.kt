@@ -1,5 +1,6 @@
-package io.github.seorin21.farm.data
+package io.github.seorin21.farm.region
 
+import io.github.seorin21.farm.data.PersistentDataKeychain
 import kotlinx.serialization.Serializable
 
 object PlayerRegionKeys: PersistentDataKeychain() {

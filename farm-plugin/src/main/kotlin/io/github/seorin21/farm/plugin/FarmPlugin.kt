@@ -1,5 +1,6 @@
 package io.github.seorin21.farm.plugin
 
+import io.github.seorin21.farm.plugin.command.CropsCommand
 import io.github.seorin21.farm.plugin.command.RegionCommand
 import io.github.seorin21.farm.region.RegionManager
 import org.bukkit.command.CommandSender
@@ -33,7 +34,8 @@ class FarmPlugin: JavaPlugin() {
 
         annotationParser.installCoroutineSupport()
 
-        annotationParser.parse(this)
+        //annotationParser.parse(this)
+        annotationParser.parse(CropsCommand)
         annotationParser.parse(RegionCommand)
     }
 

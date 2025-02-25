@@ -1,6 +1,6 @@
 package io.github.seorin21.farm.region
 
-interface RegionGroup {
+interface RegionItem {
     val x: Int
     val y: Int
     val z: Int
@@ -8,4 +8,7 @@ interface RegionGroup {
     val length: Int
     val height: Int
     val width: Int
+
+    //val crops: Crops
+    val temperature: Double
 }

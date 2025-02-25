@@ -1,6 +1,5 @@
 package io.github.seorin21.farm.plugin.command
 
-import io.github.monun.tap.config.Config
 import io.github.seorin21.farm.region.RegionConfig
 import io.github.seorin21.farm.region.RegionManager
 import org.bukkit.Bukkit
@@ -9,7 +8,6 @@ import org.bukkit.entity.Player
 import org.incendo.cloud.annotations.Argument
 import org.incendo.cloud.annotations.Command
 import org.incendo.cloud.annotations.suggestion.Suggestions
-import org.incendo.cloud.suggestion.Suggestion
 import kotlin.reflect.KClass
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
@@ -187,7 +185,7 @@ object RegionCommand {
         if (!sender.isOp)
             return sender.sendMessage("해당 명령어는 관리자만 사용가능합니다.")
 
-        getConfigKeys().forEach {
+        getRegionConfigKeys().forEach {
             sender.sendMessage(it)
         }
 
@@ -197,15 +195,15 @@ object RegionCommand {
     @Command("config get <key>")
     fun getConfigValue(
         sender: CommandSender,
-        @Argument("key", suggestions = "CONFIG_KEYS") key: String
+        @Argument("key", suggestions = "REGION_CONFIG_KEYS") key: String
     ) {
         if (!sender.isOp)
             return sender.sendMessage("해당 명령어는 관리자만 사용 가능합니다.")
 
         if (key == "ALL") {
             val result = RegionManager.getRegionConfigValue().map { "`${it.key}:: ${it.value}`" }
-            for (i in 0 until result.size)
-                sender.sendMessage(result[i])
+            for (r in result)
+                sender.sendMessage(r)
 
             return
         }
@@ -217,7 +215,7 @@ object RegionCommand {
     @Command("config set <key> <value>")
     fun setConfigValue(
         sender: CommandSender,
-        @Argument("key", suggestions = "CONFIG_KEYS") key: String,
+        @Argument("key", suggestions = "REGION_CONFIG_KEYS") key: String,
         @Argument("value") value: Boolean
     ) {
         if (!sender.isOp)
@@ -232,8 +230,8 @@ object RegionCommand {
         sender.sendMessage("setRegionConfigValue(`$key`, $value):: $result")
     }
 
-    @Suggestions("CONFIG_KEYS")
-    fun getConfigKeys(): List<String> {
+    @Suggestions("REGION_CONFIG_KEYS")
+    fun getRegionConfigKeys(): List<String> {
         return RegionConfig::class.memberProperties
             .filter { (it.returnType.classifier as? KClass<*>) == Boolean::class }
             .map { it.apply { isAccessible = true }.name }

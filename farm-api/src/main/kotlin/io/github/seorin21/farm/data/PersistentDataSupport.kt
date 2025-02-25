@@ -10,6 +10,7 @@ import org.bukkit.persistence.PersistentDataContainer
 import org.bukkit.persistence.PersistentDataHolder
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.Plugin
+import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.plugin.java.PluginClassLoader
 import kotlin.reflect.KProperty
 
@@ -37,15 +38,7 @@ import kotlin.reflect.KProperty
 @JvmInline
 value class PersistentDataSupport(val container: PersistentDataContainer) {
     companion object {
-
-        internal val plugin: Plugin
-
-        init {
-            val pluginClassLoader = PersistentDataSupport::class.java.classLoader as PluginClassLoader
-            val plugin = pluginClassLoader.plugin
-
-            this.plugin = plugin ?: throw IllegalStateException("Cannot find plugin instance")
-        }
+        internal val plugin: Plugin = JavaPlugin.getProvidingPlugin(PersistentDataSupport::class.java)
 
         /**
          * 자바 타입을 [PersistentDataType] 으로 변환합니다.
