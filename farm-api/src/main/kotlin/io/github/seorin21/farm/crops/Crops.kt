@@ -1,12 +1,23 @@
 package io.github.seorin21.farm.crops
 
+import io.github.monun.tap.config.Config
 import io.github.seorin21.farm.loader.LibraryLoader
 
-interface Crops {
-    val type: CropsConfig
+open class Crops {
+    @Config(required = true)
+    val type: CropsType = CropsType.WHEAT
 
-    val temperature: Double
-    val duration: Int
+    @Config(required = true)
+    val x: Int = -1
+    @Config(required = true)
+    val y: Int = -1
+    @Config(required = true)
+    val z: Int = -1
+
+    @Config(required = true)
+    val created: Long = System.currentTimeMillis()
+    @Config(required = true)
+    val duration: Int = 0
 }
 
 interface CropsSupport {

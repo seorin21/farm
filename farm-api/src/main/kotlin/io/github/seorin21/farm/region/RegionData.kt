@@ -9,7 +9,6 @@ object PlayerRegionKeys: PersistentDataKeychain() {
 
 @Serializable
 data class RegionData(
-    // val world: String,
     val chunkX: Int,
     val chunkZ: Int
 )

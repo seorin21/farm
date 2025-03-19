@@ -14,9 +14,6 @@ import kotlin.reflect.jvm.isAccessible
 class CropsSupportImpl: CropsSupport {
     private val plugin: JavaPlugin = JavaPlugin.getProvidingPlugin(CropsSupportImpl::class.java)
 
-    private val CROPS_PATH: File = File(plugin.dataFolder, "crops")
-    private val CROPS_CONFIG_PATH: File = File(CROPS_PATH, "config")
-
     private val crops: HashMap<String, CropsConfig> = hashMapOf()
 
     init {
@@ -28,7 +25,7 @@ class CropsSupportImpl: CropsSupport {
 
     override fun getConfig(type: CropsType): CropsConfig? {
         return crops.getOrElse(type.name) {
-            val CONFIG_FILE = File(CROPS_CONFIG_PATH, "${type.name}.yml")
+            val CONFIG_FILE = File(CONFIG_PATH, "${type.name}.yml")
             CropsConfig().apply {
                 ConfigSupport.compute(this, CONFIG_FILE, separateByClass = true)
             }.takeIf { it.material.name == type.name }
@@ -46,12 +43,12 @@ class CropsSupportImpl: CropsSupport {
     }
 
     override fun setConfig(config: CropsConfig): Boolean {
-        val CONFIG_FILE = File(CROPS_CONFIG_PATH, "${config.material.name}.yml")
+        val CONFIG_FILE = File(CONFIG_PATH, "${config.material.name}.yml")
         return CONFIG_FILE.delete() && !ConfigSupport.compute(config, CONFIG_FILE, separateByClass = true)
     }
 
     override fun setConfig(type: CropsType, config: CropsConfig): Boolean {
-        val CONFIG_FILE = File(CROPS_CONFIG_PATH, "${type.name}.yml")
+        val CONFIG_FILE = File(CONFIG_PATH, "${type.name}.yml")
         return CONFIG_FILE.delete() && !ConfigSupport.compute(config, CONFIG_FILE, separateByClass = true)
     }
 

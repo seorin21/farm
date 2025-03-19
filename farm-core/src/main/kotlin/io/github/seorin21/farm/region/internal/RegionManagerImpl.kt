@@ -6,10 +6,8 @@ import io.github.monun.tap.fake.FakeEntityServer
 
 import io.github.seorin21.farm.data.PersistentDataSupport
 import io.github.seorin21.farm.region.PlayerRegionKeys.regionKey
-import io.github.seorin21.farm.region.RegionData
 import io.github.seorin21.farm.data.persistentData
-import io.github.seorin21.farm.region.RegionConfig
-import io.github.seorin21.farm.region.RegionManager
+import io.github.seorin21.farm.region.*
 
 import org.bukkit.entity.Player
 import org.bukkit.event.HandlerList
@@ -17,20 +15,22 @@ import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.plugin.java.PluginClassLoader
 
 import java.io.File
+import java.util.UUID
 
 import kotlin.reflect.KClass
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
 
-
 class RegionManagerImpl : RegionManager {
     private val plugin: JavaPlugin = JavaPlugin.getProvidingPlugin(RegionManagerImpl::class.java)
 
     private val server: FakeEntityServer = FakeEntityServer.create(plugin)
-    //private val manager: EntityEventManager = EntityEventManager(plugin)
+    // private val manager: EntityEventManager = EntityEventManager(plugin)
 
-    private val CONFIG_PATH: File = File(plugin.dataFolder, "config.yml")
+    private val regions: MutableMap<UUID, Region> = mutableMapOf()
+
+
     private var config: RegionConfig = getRegionConfig()
 
     private val event: RegionEventListener = RegionEventListener(plugin)
@@ -76,7 +76,7 @@ class RegionManagerImpl : RegionManager {
 
     override fun getRegionConfig(): RegionConfig {
         return RegionConfig().apply {
-            ConfigSupport.compute(this, CONFIG_PATH, separateByClass = true)
+            ConfigSupport.compute(this, REGION_CONFIG_PATH, separateByClass = true)
         }
     }
 
@@ -101,11 +101,11 @@ class RegionManagerImpl : RegionManager {
     }
 
     override fun setRegionConfig(): Boolean {
-        return CONFIG_PATH.delete() && !ConfigSupport.compute(config, CONFIG_PATH, separateByClass = true)
+        return REGION_CONFIG_PATH.delete() && !ConfigSupport.compute(config, REGION_CONFIG_PATH, separateByClass = true)
     }
 
     override fun setRegionConfig(config: RegionConfig): Boolean {
-        return CONFIG_PATH.delete() && !ConfigSupport.compute(config, CONFIG_PATH, separateByClass = true)
+        return REGION_CONFIG_PATH.delete() && !ConfigSupport.compute(config, REGION_CONFIG_PATH, separateByClass = true)
     }
 
     override fun setRegionConfigValue(value: Boolean): Boolean {

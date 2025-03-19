@@ -8,7 +8,4 @@ interface RegionItem {
     val length: Int
     val height: Int
     val width: Int
-
-    //val crops: Crops
-    val temperature: Double
 }
